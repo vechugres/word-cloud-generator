@@ -9,11 +9,6 @@ pipeline {
         timestamps()
     }
     stages{
-        stage ('Get source code'){
-            steps{
-                git branch: "$GIT_BRANCH", url: 'https://github.com/Fenikks/word-cloud-generator.git'
-            }
-        }
         stage ('Build'){
             steps{
                 sh '''export GOPATH=$WORKSPACE/go
