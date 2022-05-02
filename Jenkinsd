@@ -38,16 +38,9 @@ pipeline {
             steps {
                 nexusArtifactUploader (artifacts: [[artifactId: 'world-cloud-generator', 
                 classifier: '', file: 'artifacts/word-cloud-generator.gz', 
-                type: 'gz']], credentialsId: 'nexus-creds', groupId: "2", 
+                type: 'gz']], credentialsId: 'nexus-creds', groupId: "$git_branch", 
                 nexusUrl: '192.168.33.91:8081', nexusVersion: 'nexus3', protocol: 'http', 
                 repository: 'world-cloud-build', version: "1.$BUILD_NUMBER")
-                
-
-            }
-       }
-    }
-}
-
             }
         }   
         stage ("Paralleled test") {
@@ -56,7 +49,7 @@ pipeline {
                     steps {
                         sh '''
                               sshpass -p 'vagrant' ssh vagrant@192.168.33.81 -o StrictHostKeyChecking=no " cd /opt/wordcloud/
-                              sudo curl -u downloader:123 -X GET "http://192.168.33.91:8081/repository/world-cloud-build/2/world-cloud-generator/1.$BUILD_NUMBER/world-cloud-generator-1.$BUILD_NUMBER.gz" -o /opt/wordcloud/word-cloud-generator.gz
+                              sudo curl -u downloader:123 -X GET "http://192.168.33.91:8081/repository/world-cloud-build/$git_branch/world-cloud-generator/1.$BUILD_NUMBER/world-cloud-generator-1.$BUILD_NUMBER.gz" -o /opt/wordcloud/word-cloud-generator.gz
                               if [[ $? -ne 0 ]];
                                 then
                                     echo "File not found"
@@ -74,7 +67,7 @@ pipeline {
                     steps {
                         sh '''
                               sshpass -p 'vagrant' ssh vagrant@192.168.33.86 -o StrictHostKeyChecking=no " cd /opt/wordcloud/
-                              sudo curl -u downloader:123 -X GET "http://192.168.33.91:8081/repository/world-cloud-build/2/world-cloud-generator/1.$BUILD_NUMBER/world-cloud-generator-1.$BUILD_NUMBER.gz" -o /opt/wordcloud/word-cloud-generator.gz
+                              sudo curl -u downloader:123 -X GET "http://192.168.33.91:8081/repository/world-cloud-build/$git_branch/world-cloud-generator/1.$BUILD_NUMBER/world-cloud-generator-1.$BUILD_NUMBER.gz" -o /opt/wordcloud/word-cloud-generator.gz
                               if [[ $? -ne 0 ]];
                                 then
                                     echo "File not found"
