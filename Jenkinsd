@@ -40,7 +40,14 @@ pipeline {
                 classifier: '', file: 'artifacts/word-cloud-generator.gz', 
                 type: 'gz']], credentialsId: 'nexus-creds', groupId: "2", 
                 nexusUrl: '192.168.33.91:8081', nexusVersion: 'nexus3', protocol: 'http', 
-                repository: 'world-cloud-build', version: '1.$BUILD_NUMBER')
+                repository: 'world-cloud-build', version: '1.$BUILD_NUMBER")
+                
+
+            }
+       }
+    }
+}
+
             }
         }   
         stage ("Paralleled test") {
