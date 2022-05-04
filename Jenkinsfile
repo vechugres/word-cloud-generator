@@ -5,6 +5,10 @@ pipeline {
     tools {
         go 'Go 1.16'
     }
+    environment {
+      git_branch = 'master'
+    }
+    
     options {
         timestamps()
     }
@@ -32,7 +36,7 @@ pipeline {
         }
         stage ('Nexus upload'){
             steps{
-               nexusArtifactUploader artifacts: [[artifactId: 'word-cloud-generator', classifier: '', file: 'artifacts/word-cloud-generator', type: 'gz']], credentialsId: 'nexus_uploader', groupId: "jenkinsfile-build", nexusUrl: '192.168.33.90:8081/', nexusVersion: 'nexus3', protocol: 'http', repository: 'word-cloud-build', version: '1.$BUILD_NUMBER'
+               nexusArtifactUploader artifacts: [[artifactId: 'word-cloud-generator', classifier: '', file: 'artifacts/word-cloud-generator', type: 'gz']], credentialsId: 'nexus_uploader', groupId: "$git_branch", nexusUrl: '192.168.33.90:8081/', nexusVersion: 'nexus3', protocol: 'http', repository: 'word-cloud-build', version: '1.$BUILD_NUMBER'
             }
        }
     }
