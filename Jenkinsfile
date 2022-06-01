@@ -46,7 +46,6 @@ pipeline {
 			{
 			sh '''
                    	curl -u ${nexus_user}:${nexus_password} -X GET "http://localhost:8081/repository/word-cloud-build/$git_branch/word-cloud-generator/1.$BUILD_NUMBER/word-cloud-generator-1.$BUILD_NUMBER.gz" -o /opt/wordcloud/word-cloud-generator.gz
-                        ls -l /opt/wordcloud
 			gunzip -f /opt/wordcloud/word-cloud-generator.gz
                         chmod +x /opt/wordcloud/word-cloud-generator
                         /opt/wordcloud/word-cloud-generator &
