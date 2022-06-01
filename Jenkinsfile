@@ -1,7 +1,7 @@
 pipeline {
         agent{
 	      dockerfile {filename 'Dockerfile'
-			   args '--network alina'
+			   args '--network host'
 			 }
         	}
 	stages{
