@@ -38,7 +38,7 @@ pipeline {
 			   dockerfile {
 				   dir 'staging'
 			           filename 'Dockerfile'
-				   args '--network alina --name staging -p 88:8888'
+				   args '--network host --name staging -p 88:8888'
 				      }
 		         }
 		   steps {
