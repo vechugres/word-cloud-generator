@@ -42,21 +42,29 @@ pipeline {
 				      }
 		         }
 		   steps {
-                          sh '''
-			curl -X GET -u downloader:downloader "http://localhost:8081/repository/word-cloud-build/$git_branch/word-cloud-generator/1.$BUILD_NUMBER/word-cloud-generator-1.$BUILD_NUMBER.gz" -o /opt/wordcloud/word-cloud-generator.gz
-                        gunzip -f /opt/wordcloud/word-cloud-generator.gz
-                        chmod +x /opt/wordcloud/word-cloud-generator
-			/opt/wordcloud/word-cloud-generator &
-			sleep 6
-			res=`curl -s -H "Content-Type: application/json" -d '{"text":"test"}' http://localhost:8888/version | jq '. | length'`
-                        if [ "1" != "$res" ]; then exit 99;
-                             fi
-	                 res=`curl -s -H "Content-Type: application/json" -d '{"text":"ths is a really really really important thing this is"}' http://localhost:8888/api | jq '. | length'`
-	                if [ "7" != "$res" ]; then exit 99;
-                             fi
-			     sleep 90
-			fi
-	        	'''
+			sh '''
+                   curl -u admin:admin -X GET "http://localhost:8081/repository/word-cloud-build/$git_branch/word-cloud-generator/1.$BUILD_NUMBER/word-cloud-generator-1.$BUILD_NUMBER.gz" -o /opt/wordcloud/word-cloud-generator.gz
+                   if [[ $? -ne 0 ]];
+                   then
+                       echo "File not found"
+                       exit 1
+                   else
+                       gunzip -f /opt/wordcloud/word-cloud-generator.gz
+                       chmod +x /opt/wordcloud/word-cloud-generator
+                       /opt/wordcloud/word-cloud-generator &
+                       sleep 5
+                       res=`curl -s -H "Content-Type: application/json" -d '{"text":"ths is a really really really important thing this is"}' http://localhost:8888/version | jq '. | length'`
+                       if [[ "1" != "$res" ]]; then 
+                          exit 98
+                       fi
+                       res=`curl -s -H "Content-Type: application/json" -d '{"text":"ths is a really really really important thing this is"}' http://localhost:8888/api | jq '. | length'`
+                       if [[ "7" != "$res" ]]; then
+                          exit 99
+                       fi
+                       sleep 90
+                   fi
+                   
+                  '''
 		         }
          
 	   }	   
