@@ -1,5 +1,9 @@
 FROM alpine:latest
 
-RUN apk update && apk upgrade && apk add curl jq gcompat
+RUN apk add curl gcompat jq && mkdir -p /opt/wordcloud 
 
-RUN mkdir /opt/wordcloud
+WORKDIR /opt/wordcloud
+
+EXPOSE 8888
+
+CMD /opt/wordcloud/word-cloud-generator
